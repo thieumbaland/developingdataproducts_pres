@@ -26,7 +26,7 @@ The Belgian Energy Market app is a Shiny dashboard that allows energy suppliers 
 * Clients: browse electricity or gas usage in one or multiple municipalities. The average usage is calculated, as well as a drill-down per selected municipality. The data can be explored in a table at the bottom of the page.
 * Suppliers: can view and compare their market share with industry peers. Irrelevant peers can be deselected using the menu in the sidebar or in the graph itself (implementation of plotly).
 
-<img class=center src="Capture2.png" height=250>
+<img class=center src="https://raw.githubusercontent.com/thieumbaland/developingdataproducts_pres/gh-pages/Capture2.PNG" height=250>
 
 --- .class #id
 
