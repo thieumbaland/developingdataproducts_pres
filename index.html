@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Belgian Energy Market App</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Belgian Energy Market App">
+  <meta name="author" content="Mathieu Wauters">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Belgian Energy Market App</h1>
+    <h2>Exploring energy client and supplier data</h2>
+    <p>Mathieu Wauters<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <style type="text/css">
+code.r{ /* Code block */
+  font-size: 12px;
+}
+pre { /* Code block */
+  font-size: 12px
+}
+</style>
+
+<h2>App functionality</h2>
+
+<p>The Belgian Energy Market app is a Shiny dashboard that allows energy suppliers and customers to browse relevant open-source data.</p>
+
+<ul>
+<li>Clients: browse electricity or gas usage in one or multiple municipalities. The average usage is calculated, as well as a drill-down per selected municipality. The data can be explored in a table at the bottom of the page.</li>
+<li>Suppliers: can view and compare their market share with industry peers. Irrelevant peers can be deselected using the menu in the sidebar or in the graph itself (implementation of plotly).</li>
+</ul>
+
+<p><img class=center src="Capture2.png" height=250></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Getting &amp; Cleaning Data</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>The data was downloaded from the website of the Belgian government (<a href="http://data.gov.be/nl/search/datasets?f%5B0%5D=im_field_category%3A35">http://data.gov.be/nl/search/datasets?f[0]=im_field_category%3A35</a>)</li>
+<li>A separate script <code>preparation.R</code> was written for data cleaning. </li>
+<li>Geolocation information of the municipalities was added using Google&#39;s Geocoding API (<a href="https://developers.google.com/maps/documentation/geocoding/intro">https://developers.google.com/maps/documentation/geocoding/intro</a>). The locations are visualized using the <code>leaflet</code> package. </li>
+<li>The outcome is a <b>tidy dataset</b> for electricity and gas and for clients and suppliers. This is shown below.</li>
+</ul>
+
+<pre><code>## Source: local data frame [6 x 10]
+## 
+##   Hoofdgemeente Verbruiksjaar       Energie Injectie.afname
+##           (chr)         (int)         (chr)           (chr)
+## 1         AALST          2013 Elektriciteit        Injectie
+## 2         AALST          2014 Elektriciteit          Afname
+## 3         AALST          2012       Aardgas          Afname
+## 4         AALST          2014 Elektriciteit          Afname
+## 5         AALST          2013       Aardgas          Afname
+## 6         AALST          2014 Elektriciteit          Afname
+## Variables not shown: Sector (chr), Subsector (chr), Toegangspunt (chr),
+##   Benaderend.Verbruik (dbl), lat (dbl), lng (dbl).
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Reactivity</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The user interface and server are connected by means of reactivity (<code>reactive()</code> method in R). An explanation for the client and supplier data is given below:</p>
+
+<ul>
+<li>Client: as a municipality is changed (added, removed) or the sector is changed, <code>ui.R</code> calls <code>server.R</code> which then adjust the dataframe in which the data is stored. The visualization (leaflet map) is modified but the data and tables change as well. The overall consumption needs to be recalculated and the plots (made in <code>plotly</code>) are modified.</li>
+<li>Supplier: here, reactivity is a bit more straightforward. As the selected supplier changes, the filtering in the underlying dataframe needs to be changed as well and the corresponding visuals will be adapted.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Future development</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Finally, we can think about possible expansions and improvements for this dashboard. </p>
+
+<ul>
+<li>The ultimate goal could be to turn this dashboard into the one-stop shop for energy usage, allowing individual customers to log in, check their usage and compare this to people in the same region and with the same family situation.</li>
+<li>A prediction of future energy use based on data from the previous months or years could be added as well. The course on <code>Practical Machine Learning</code> is a great starting point for this.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Getting &amp; Cleaning Data'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Reactivity'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Future development'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
